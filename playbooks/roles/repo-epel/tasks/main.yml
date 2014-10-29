@@ -1,0 +1,9 @@
+---
+- name: Copy EPEL's GPG key
+  copy: src=RPM-GPG-KEY-EPEL-7 dest=/etc/pki/rpm-gpg owner=root group=root mode=0644
+
+- name: Copy EPEL's repo file
+  copy: src=epel.repo dest=/etc/yum.repos.d/ owner=root group=root mode=0644
+
+- name: Install epel-release package
+  yum: name=epel-release state=installed enablerepo=epel

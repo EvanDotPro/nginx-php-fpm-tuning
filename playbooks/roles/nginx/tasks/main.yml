@@ -1,0 +1,12 @@
+---
+- name: Enable Nginx Repository
+  copy: src=nginx.repo dest=/etc/yum.repos.d/ owner=root group=root mode=0644
+
+- name: Install Nginx
+  yum: name=nginx state=installed
+
+- name: Configure Nginx
+  copy: src=nginx.conf dest=/etc/nginx/ owner=root group=root mode=0644
+
+- name: Enable/Start Nginx
+  service: name=nginx state=started enabled=yes

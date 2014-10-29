@@ -1,0 +1,20 @@
+---
+- name: Configure sysctl
+  lineinfile: dest=/etc/sysctl.conf
+              line="{{ item }}"
+              state=present
+  with_items:
+    - "fs.file-max=131072" # 256 * MB of RAM
+    - "net.ipv4.tcp_tw_recycle = 1"
+    - "net.ipv4.tcp_tw_reuse = 1"
+    - "net.core.somaxconn = 1024"
+    - "net.ipv4.ip_local_port_range = 1024 65535"
+  register: sysctl
+
+# We are using worker_rlimit_nofile in nginx.conf instead
+#- name: Copy /etc/security/limits.conf
+#  copy: src=limits.conf dest=/etc/security owner=root group=root mode=0644
+
+- name: Reload sysctl settings
+  command: sysctl -p
+  when: sysctl.changed

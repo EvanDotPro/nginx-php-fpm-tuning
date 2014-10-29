@@ -1,0 +1,6 @@
+---
+- name: Install load testing tool(s)
+  yum: name={{item}} state=installed
+  with_items:
+  - siege
+  - httpd-tools

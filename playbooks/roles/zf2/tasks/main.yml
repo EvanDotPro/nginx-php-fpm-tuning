@@ -1,0 +1,21 @@
+---
+- name: Copy default nginx vhost
+  copy: src=default.conf dest=/etc/nginx/conf.d owner=root group=root mode=0644
+  register: nginx_vhost
+
+- name: Ensure directory /var/www/vhosts
+  file: path=/var/www/vhosts/ state=directory recurse=yes
+
+- name: Install Composer
+  shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/var/www/vhosts
+  when: nginx_vhost.changed
+
+- name: Install ZF2 Skeleton
+  command: php composer.phar create-project -sdev --repository-url="https://packages.zendframework.com" zendframework/skeleton-application default
+  args:
+    chdir: /var/www/vhosts
+  when: nginx_vhost.changed
+
+- name: Restart Nginx
+  service: name=nginx state=restarted
+  when: nginx_vhost.changed

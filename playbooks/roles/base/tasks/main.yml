@@ -1,0 +1,6 @@
+---
+- name: Install some base packages
+  yum: name={{item}} state=installed
+  with_items:
+  - vim
+  - htop

@@ -1,0 +1,14 @@
+---
+- name: Install epel-release package
+  yum: name={{item}} state=installed
+  with_items:
+  - php
+  - php-fpm
+  - php-intl
+  - php-opcache
+
+- name: Configure PHP-FPM Pool
+  copy: src=www.conf dest=/etc/php-fpm.d/ owner=root group=root mode=0644
+
+- name: Enable/Start PHP-FPM
+  service: name=php-fpm state=started enabled=yes

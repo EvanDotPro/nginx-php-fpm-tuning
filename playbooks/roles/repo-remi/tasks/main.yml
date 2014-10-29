@@ -1,0 +1,21 @@
+---
+- name: Copy Remi's GPG key
+  copy: src=RPM-GPG-KEY-remi dest=/etc/pki/rpm-gpg owner=root group=root mode=0644
+
+- name: Copy Remi's repo file
+  copy: src=remi.repo dest=/etc/yum.repos.d/ owner=root group=root mode=0644
+
+- name: Install remi-release package
+  yum: name=remi-release state=installed enablerepo=remi
+
+- name: Make sure remi repo is enabled
+  ini_file: dest=/etc/yum.repos.d/remi.repo
+            section=remi
+            option=enabled
+            value=1
+
+- name: Make sure remi-php56 repo is enabled
+  ini_file: dest=/etc/yum.repos.d/remi.repo
+            section=remi-php56
+            option=enabled
+            value=1

@@ -1,0 +1,22 @@
+---
+- name: Set up Nginx
+  hosts: nginx
+  user: root
+  roles:
+  - { role: base }
+  - { role: nginx }
+  - { role: sysctl }
+
+- name: Set up PHP-FPM
+  hosts: php
+  user: root
+  roles:
+  - { role: base }
+  - { role: php }
+
+- name: Set up load tester
+  hosts: load-tester
+  user: root
+  roles:
+  - { role: base }
+  - { role: load-tester }
